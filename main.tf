@@ -63,6 +63,7 @@ resource "azurerm_public_ip" "main" {
     name = "${var.prefix}-publicip"
     resource_group_name = azurerm_resource_group.main.name
     location = azurerm_resource_group.main.location
+    sku = "Standard"
     allocation_method = "Static"
   
 }
@@ -71,10 +72,30 @@ resource "azurerm_lb" "main" {
     name = "${var.prefix}-lb"
     location = azurerm_resource_group.main.location
     resource_group_name = azurerm_resource_group.main.name
+    sku = "Standard"
     frontend_ip_configuration {
       name = "PublicIPAddr"
       public_ip_address_id = azurerm_public_ip.main.id
     }
+}
+
+resource "azurerm_lb_backend_address_pool" "main" {
+  name = "${var.prefix}-lb-backend"
+  loadbalancer_id = azurerm_lb.main.id
+}
+
+resource "azurerm_lb_backend_address_pool_address" "main" {
+  name = "${var.prefix}-lb-pooladdr"
+  backend_address_pool_id = azurerm_lb_backend_address_pool.main.id
+  //virtual_network_id = azurerm_virtual_network.main.id
+  }
+
+resource "azurerm_network_interface_backend_address_pool_association" "main" {
+  count = var.vm_count
+  network_interface_id = azurerm_network_interface.main[count.index].id
+  backend_address_pool_id = azurerm_lb_backend_address_pool.main.id
+  ip_configuration_name = "internal"
+  
 }
 
 resource "azurerm_availability_set" "main" {
