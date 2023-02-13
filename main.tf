@@ -79,6 +79,15 @@ resource "azurerm_lb" "main" {
     }
 }
 
+resource "azurerm_lb_rule" "main" {
+  loadbalancer_id = azurerm_lb.main.id
+  name = "lbrule"
+  protocol = "Tcp"
+  frontend_port = "80"
+  backend_port = "80"
+  frontend_ip_configuration_name = "PublicIPAddr"
+}
+
 resource "azurerm_lb_backend_address_pool" "main" {
   name = "${var.prefix}-lb-backend"
   loadbalancer_id = azurerm_lb.main.id
