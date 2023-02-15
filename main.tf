@@ -41,14 +41,14 @@ resource "azurerm_network_security_group" "main" {
   location = azurerm_resource_group.main.location
 
   security_rule {
-    name = "Allow-subnet-access"
+    name = "Allow-http-access"
     priority = 100
     direction = "Inbound"
     access = "Allow"
-    protocol = "Tcp"
+    protocol = "*"
     source_port_range = "*"
-    destination_port_range = "*"
-    source_address_prefix = "VirtualNetwork"
+    destination_port_range = "80"
+    source_address_prefix = "*"
     destination_address_prefix = "*"
   }
 }
@@ -86,6 +86,14 @@ resource "azurerm_lb_rule" "main" {
   frontend_port = "80"
   backend_port = "80"
   frontend_ip_configuration_name = "PublicIPAddr"
+  probe_id = azurerm_lb_probe.main.id
+  backend_address_pool_ids = ["${azurerm_lb_backend_address_pool.main.id}"]
+}
+
+resource "azurerm_lb_probe" "main" {
+  loadbalancer_id = azurerm_lb.main.id
+  name = "httpd-running-probe"
+  port = 80
 }
 
 resource "azurerm_lb_backend_address_pool" "main" {
@@ -93,11 +101,6 @@ resource "azurerm_lb_backend_address_pool" "main" {
   loadbalancer_id = azurerm_lb.main.id
 }
 
-resource "azurerm_lb_backend_address_pool_address" "main" {
-  name = "${var.prefix}-lb-pooladdr"
-  backend_address_pool_id = azurerm_lb_backend_address_pool.main.id
-  //virtual_network_id = azurerm_virtual_network.main.id
-  }
 
 resource "azurerm_network_interface_backend_address_pool_association" "main" {
   count = var.vm_count
@@ -128,7 +131,7 @@ resource "azurerm_virtual_machine" "main" {
   name                            = "${var.prefix}-vm${count.index}"
   resource_group_name             = azurerm_resource_group.main.name
   location                        = azurerm_resource_group.main.location
-  vm_size                         = "Standard_D2s_v3"
+  vm_size                         = "Standard_B1s"
   delete_os_disk_on_termination = true
   delete_data_disks_on_termination = true
   os_profile {
