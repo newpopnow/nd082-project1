@@ -16,20 +16,20 @@ In order to build, you will need to:
 4. Install [Terraform](https://www.terraform.io/downloads.html)
 
 ### Instructions
-Step 1: Build a Packer image
+#### Step 1: Build a Packer image
 
-1. To create Azure principle service:
+##### 1. To create Azure principle service:
 ```
 az ad sp create-for-rbac --role contributor --scopes /subscriptions/mySubscriptionID
 ```
 Take note "appId" and "password" output for next step
 
-2. Create a Resource group:
+##### 2. Create a Resource group:
 ```
 az group create --name "PackerImage-rg" --location eastus
 ```
 
-3. Build Packer template
+##### 3. Build Packer template
 
 Open file server.json with your text editor, update these value (from previous):
 ```
@@ -47,7 +47,7 @@ To verify Image has been created, run:
 az image list
 ```
 
-Step 2: To deploy server cluster
+#### Step 2: To deploy server cluster
 
 Run:
 ```
