@@ -17,7 +17,11 @@ In order to build, you will need to:
 
 ### Instructions
 Create Azure principle service
-```az ad sp create-for-rbac --role contributor --scopes /subscriptions/mySubscriptionID```
+
+```
+az ad sp create-for-rbac --role contributor --scopes /subscriptions/mySubscriptionID
+```
+
 Note appId and password output for future use
 
 Build Packer template
