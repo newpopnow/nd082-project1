@@ -16,33 +16,43 @@ In order to build, you will need to:
 4. Install [Terraform](https://www.terraform.io/downloads.html)
 
 ### Instructions
-To create Azure principle service:
+Step 1: Build a Packer image
+
+1. To create Azure principle service:
 ```
 az ad sp create-for-rbac --role contributor --scopes /subscriptions/mySubscriptionID
 ```
 Take note "appId" and "password" output for next step
 
-Create a Resource group:
+2. Create a Resource group:
 ```
 az group create --name "PackerImage-rg" --location eastus
 ```
 
-Build Packer template
+3. Build Packer template
 
-Edit server.json
+Open file server.json with your text editor, update these value (from previous):
+```
+"client_id": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxx",
+"client_secret": "ppppppp-pppp-pppp-pppp-ppppppppppp",
+"tenant_id": "zzzzzzz-zzzz-zzzz-zzzz-zzzzzzzzzzzz",
+"subscription_id": "yyyyyyy-yyyy-yyyy-yyyy-yyyyyyyyyyy",
+```
+Save server.json and run:
+```
+packer build server.json
+```
+To verify Image has been created, run:
+```
+az image list
+```
 
-```packer build server.json```
+Step 2: To deploy server cluster
 
-Match Resource group name, image name
-Create a service principle in Azure
-Modify client_id, client_secret, subscription_id as yours
-Run packer build server.json
-
-To deploy server cluster
-
-Run
+Run:
+```
 terraform plan -output tf.plan
 terraform apply
-
+```
 ### Output
-The result will output an Public IP Address of Load balancer 
+The result will output an Public IP Address of Load balancer, open it and you will see nginx default homepage. Well done!
