@@ -56,3 +56,11 @@ terraform apply
 ```
 ### Output
 The result will output an Public IP Address of Load balancer, open it and you will see nginx default homepage. Well done!
+
+### Wrap up
+To remove resources, run following command:
+```
+terraform destroy -auto-approve
+az image delete -g PackerImage-rg -n myPackerImage
+az group delete --name PackerImage-rg
+```
