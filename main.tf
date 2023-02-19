@@ -168,3 +168,8 @@ resource "azurerm_virtual_machine" "main" {
 
   availability_set_id = azurerm_availability_set.main.id
 }
+
+output "lb-pip" {
+  value = "http://${azurerm_public_ip.main.ip_address}/"
+  description = "This is the URL for the Load Balancer"
+}

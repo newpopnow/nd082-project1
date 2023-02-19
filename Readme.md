@@ -3,6 +3,9 @@
 ### Introduction
 In this project, you will build a web server by Packer then deploy a cluster of servers from Packer image with a Load balancer to manage incomming traffic
 
+Diagram:
+![alt](/project-1.jpg)
+
 ### Getting Started
 In order to build, you will need to:
 * Clone this repository
@@ -57,7 +60,7 @@ terraform apply
 ### Output
 The result will output an Public IP Address of Load balancer, open it and you will see nginx default homepage. Well done!
 
-### Wrap up
+### Cleanup Resources
 To remove resources, run following command:
 ```
 terraform destroy -auto-approve

@@ -1,0 +1,40 @@
+{
+    "variables": {
+		  "client_id": "{{env `ARM_CLIENT_ID`}}",
+	    "client_secret": "{{env `ARM_CLIENT_SECRET`}}",
+	    "subscription_id": "{{env `ARM_SUBSCRIPTION_ID`}}"
+	},
+    "builders": [{
+      "type": "azure-arm",
+      "client_id": "1de3f6dc-8011-4118-9261-80eabf293ba2",
+      "client_secret": "oH38Q~IhnhjGefUyt3jVxYZhIzCz8D1xdEpV0awG",
+      "subscription_id": "6bdbc7aa-54f4-492a-8d54-d620a343e930",
+      "tenant_id": "ee914654-8200-4818-8c32-70a2e49e5d98",
+      "managed_image_resource_group_name": "Azuredevops",
+      "managed_image_name": "myPackerImage",
+
+      "os_type": "Linux",
+      "image_publisher": "Canonical",
+      "image_offer": "UbuntuServer",
+      "image_sku": "18.04-LTS",
+
+      "azure_tags": {
+        "project": "nd082-pj1"
+      },
+
+    "location": "East US",
+    "vm_size": "Standard_B1s"
+  }],
+
+  "provisioners": [{
+    "execute_command": "chmod +x {{ .Path }}; {{ .Vars }} sudo -E sh '{{ .Path }}'",
+    "inline": [
+      "apt-get update",
+      "apt-get upgrade -y",
+      "apt-get -y install nginx",
+      "/usr/sbin/waagent -force -deprovision+user && export HISTSIZE=0 && sync"
+    ],
+    "inline_shebang": "/bin/sh -x",
+    "type": "shell"
+}]
+}
