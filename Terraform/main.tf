@@ -122,7 +122,7 @@ resource "azurerm_availability_set" "main" {
 data "azurerm_image" "packerimage" {
 //    count = var.vm_count
     name = var.packer_image_name
-    resource_group_name = "Azuredevops"
+    resource_group_name = "PackerImage-rg"
 }
 
 
@@ -167,6 +167,10 @@ resource "azurerm_virtual_machine" "main" {
   }
 
   availability_set_id = azurerm_availability_set.main.id
+
+  tags = {
+    project = "nd082-project1"
+  }
 }
 
 output "lb-pip" {

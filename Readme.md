@@ -4,6 +4,7 @@
 In this project, you will build a web server by Packer then deploy a cluster of servers from Packer image with a Load balancer to manage incomming traffic
 
 Diagram:
+
 ![alt](/project-1.jpg)
 
 ### Getting Started
@@ -52,10 +53,18 @@ az image list
 
 #### Step 2: To deploy server cluster
 
+Edit following variables in vars.tf
+
+| variables name | default value   | description                                           |
+|----------------|-----------------|-------------------------------------------------------|
+| prefix         | azurelabs-nd082 | to create resource name, ex: azurelabs-nd082-resource |
+| location       | eastus          | region of Azure Datacenter                            |
+| vm_count       | 2               | define how many VM was created (between 2 and 5)      |
+
 Run:
 ```
-terraform plan -output tf.plan
-terraform apply
+terraform plan -output solution.plan
+terraform apply -auto-approve
 ```
 ### Output
 The result will output an Public IP Address of Load balancer, open it and you will see nginx default homepage. Well done!
